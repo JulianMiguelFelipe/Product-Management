@@ -1,66 +1,26 @@
-// src/pages/LoginPage.jsx (Version A - Improved)
-import React, { useState } from 'react';
+// src/pages/UserManagementPage.jsx (Version A)
+import React from 'react';
 
-export const LoginPage = ({ onLogin, onGoogleLogin }) => {
-  // Pinagsama natin sa isang object para mas malinis ang state management
-  const [formData, setFormData] = useState({ email: '', password: '' });
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleChange = (e) => {
-    const { type, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [type]: value,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    try {
-      // Hihintayin natin matapos yung login process
-      await onLogin(formData);
-    } catch (error) {
-      console.error("Login failed:", error);
-    } finally {
-      setIsLoading(false); // Babalik sa normal ang button kahit mag-success o error
-    }
-  };
-
+export const UserManagementPage = ({ structuralUsers = [], onKillSession }) => {
   return (
-    <div className="auth-card">
-      <h2>Welcome Back</h2>
-      <form onSubmit={handleSubmit}>
-        <input 
-          type="email" 
-          placeholder="Email Address" 
-          value={formData.email} 
-          onChange={handleChange} 
-          disabled={isLoading} // Hindi pwedeng i-edit habang naglo-load
-          required 
-        />
-        <input 
-          type="password" 
-          placeholder="Password" 
-          value={formData.password} 
-          onChange={handleChange} 
-          disabled={isLoading}
-          required 
-        />
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? 'Signing In...' : 'Sign In'}
-        </button>
-      </form>
-      
-      <div className="divider">or</div>
-      
-      <button 
-        onClick={onGoogleLogin} 
-        className="google-btn"
-        disabled={isLoading}
-      >
-        Continue with Google
-      </button>
+    <div className="management-view-panel">
+      <h3>Operational Matrix Credentials Log</h3>
+      <table className="user-access-matrix-table">
+        <thead>
+          <tr><th>Account Subject</th><th>System Security Tier Tag</th><th>Actions Control</th></tr>
+        </thead>
+        <tbody>
+          {structuralUsers.map(profile => (
+            <tr key={profile.id}>
+              <td>{profile.emailAddress}</td>
+              <td>{profile.assignedSystemTier}</td>
+              <td>
+                <button onClick={() => onKillSession(profile.id)}>Revoke Credentials</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
