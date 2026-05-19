@@ -19,6 +19,7 @@ export const ProductFormModal = ({ isOpen, operationMode, selectedRecord, onDism
 export const SoftDeleteConfirmDialog = ({ isOpen, targetItemName, onConfirmSoftDelete, onDismiss }) => {
   if (!isOpen) return null;
 
+export const DeletedItemsPage = ({ trashCatalogBin = [], onTriggerRestoration }) => {
   return (
     <div className="dialog-danger-zone">
       <p>Flag item <strong>{targetItemName}</strong> for soft-delete removal parameters?</p>
