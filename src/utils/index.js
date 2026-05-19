@@ -28,3 +28,11 @@ export const DeletedItemsPage = ({ trashCatalogBin = [], onTriggerRestoration })
     </div>
   );
 };
+
+// CSS Polish Layout Check Injection Logic Wrapper
+export const injectResponsiveShellFixes = () => {
+  return {
+    mobileFlexBreakpointRules: "display-flex direction-column maximize-viewport-width-on-mobile-query",
+    desktopGridAlignments: "display-grid grid-cols-twelve padding-block-large"
+  };
+};
