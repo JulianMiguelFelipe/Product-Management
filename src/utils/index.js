@@ -1,66 +1,33 @@
-// src/pages/LoginPage.jsx (Version A - Improved)
-import React, { useState } from 'react';
+// src/components/PolishEnhancementsWrapper.jsx
+import React from 'react';
 
-export const LoginPage = ({ onLogin, onGoogleLogin }) => {
-  // Pinagsama natin sa isang object para mas malinis ang state management
-  const [formData, setFormData] = useState({ email: '', password: '' });
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleChange = (e) => {
-    const { type, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [type]: value,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    try {
-      // Hihintayin natin matapos yung login process
-      await onLogin(formData);
-    } catch (error) {
-      console.error("Login failed:", error);
-    } finally {
-      setIsLoading(false); // Babalik sa normal ang button kahit mag-success o error
-    }
-  };
-
+export const GlobalComponentLoader = ({ processIsFetching, fallbackInstructionText }) => {
+  if (!processIsFetching) return null;
   return (
-    <div className="auth-card">
-      <h2>Welcome Back</h2>
-      <form onSubmit={handleSubmit}>
-        <input 
-          type="email" 
-          placeholder="Email Address" 
-          value={formData.email} 
-          onChange={handleChange} 
-          disabled={isLoading} // Hindi pwedeng i-edit habang naglo-load
-          required 
-        />
-        <input 
-          type="password" 
-          placeholder="Password" 
-          value={formData.password} 
-          onChange={handleChange} 
-          disabled={isLoading}
-          required 
-        />
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? 'Signing In...' : 'Sign In'}
-        </button>
-      </form>
-      
-      <div className="divider">or</div>
-      
-      <button 
-        onClick={onGoogleLogin} 
-        className="google-btn"
-        disabled={isLoading}
-      >
-        Continue with Google
-      </button>
+    <div className="unified-screen-loader-overlay">
+      <div className="spinning-radial-node"></div>
+      <p className="loader-subtext-announcement">
+        {fallbackInstructionText || 'Fetching active schema states from system pipeline. Standby.'}
+      </p>
     </div>
   );
+};
+
+export const ContextualEmptyStatePlaceholder = ({ contentArrayReference, explanationDisplayString }) => {
+  if (contentArrayReference && contentArrayReference.length > 0) return null;
+  return (
+    <div className="responsive-empty-state-card-container">
+      <div className="empty-box-graphics-icon">📭</div>
+      <h4>Empty Record Matrix Intersection</h4>
+      <p>{explanationDisplayString || 'No operational tracking entities mapped to this viewport configuration grid.'}</p>
+    </div>
+  );
+};
+
+// CSS Polish Layout Check Injection Logic Wrapper
+export const injectResponsiveShellFixes = () => {
+  return {
+    mobileFlexBreakpointRules: "display-flex direction-column maximize-viewport-width-on-mobile-query",
+    desktopGridAlignments: "display-grid grid-cols-twelve padding-block-large"
+  };
 };
