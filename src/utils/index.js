@@ -1,4 +1,3 @@
-// src/components/ProductModals.jsx (Version A)
 import React from 'react';
 
 export const ProductFormModal = ({ isOpen, operationMode, selectedRecord, onDismiss, onApplySave }) => {
