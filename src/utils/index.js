@@ -1,14 +1,30 @@
-// src/pages/LoginPage.jsx (Version B - Updated)
+// src/pages/LoginPage.jsx (Version A - Improved)
 import React, { useState } from 'react';
 
-// Idinagdag ang `isGoogleLoading` prop para sa user experience block
-export const LoginPage = ({ onLogin, onGoogleLogin, isGoogleLoading }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+export const LoginPage = ({ onLogin, onGoogleLogin }) => {
+  // Pinagsama natin sa isang object para mas malinis ang state management
+  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => {
+    const { type, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [type]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onLogin({ email, password });
+    setIsLoading(true);
+    try {
+      // Hihintayin natin matapos yung login process
+      await onLogin(formData);
+    } catch (error) {
+      console.error("Login failed:", error);
+    } finally {
+      setIsLoading(false); // Babalik sa normal ang button kahit mag-success o error
+    }
   };
 
   return (
@@ -18,26 +34,32 @@ export const LoginPage = ({ onLogin, onGoogleLogin, isGoogleLoading }) => {
         <input 
           type="email" 
           placeholder="Email Address" 
-          value={email} 
-          onChange={(e) => setEmail(e.target.value)} 
+          value={formData.email} 
+          onChange={handleChange} 
+          disabled={isLoading} // Hindi pwedeng i-edit habang naglo-load
           required 
         />
         <input 
           type="password" 
           placeholder="Password" 
-          value={password} 
-          onChange={(e) => setPassword(e.target.value)} 
+          value={formData.password} 
+          onChange={handleChange} 
+          disabled={isLoading}
           required 
         />
-        <button type="submit">Sign In</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? 'Signing In...' : 'Sign In'}
+        </button>
       </form>
+      
       <div className="divider">or</div>
+      
       <button 
         onClick={onGoogleLogin} 
         className="google-btn"
-        disabled={isGoogleLoading} // Inayos: Bawal i-click ulit kapag nagloload
+        disabled={isLoading}
       >
-        {isGoogleLoading ? 'Connecting to Google...' : 'Continue with Google'}
+        Continue with Google
       </button>
     </div>
   );
